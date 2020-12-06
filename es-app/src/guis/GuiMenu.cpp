@@ -263,6 +263,7 @@ void GuiMenu::openUISettings()
 	transitions.push_back("fade");
 	transitions.push_back("slide");
 	transitions.push_back("instant");
+	transitions.push_back("arcade");
 	for(auto it = transitions.cbegin(); it != transitions.cend(); it++)
 		transition_style->add(*it, *it, Settings::getInstance()->getString("TransitionStyle") == *it);
 	s->addWithLabel("TRANSITION STYLE", transition_style);
