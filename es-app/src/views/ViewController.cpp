@@ -185,8 +185,17 @@ void ViewController::playViewTransition()
 		// slide or simple slide
 		setAnimation(new MoveCameraAnimation(mCamera, target));
 		updateHelpPrompts(); // update help prompts immediately
-	} else {
+	} else if (transition_style == "instant"){
 		// instant
+		setAnimation(new LambdaAnimation(
+			[this, target](float /*t*/)
+		{
+			this->mCamera.translation() = -target;
+		}, 1));
+		updateHelpPrompts();
+	}
+	} else {
+		// arcade
 		setAnimation(new LambdaAnimation(
 			[this, target](float /*t*/)
 		{
@@ -249,12 +258,25 @@ void ViewController::launch(FileData* game, Vector3f center)
 			if (mCurrentView)
 				mCurrentView->onShow();
 		});
-	} else { // instant
+	} else if (transition_style == "instant"){
 		setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 10), 0, [this, origCamera, center, game]
 		{
 			game->launchGame(mWindow);
 			mCamera = origCamera;
 			setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 10), 0, [this] { mLockInput = false; }, true);
+			this->onFileChanged(game, FILE_METADATA_CHANGED);
+			if (mCurrentView)
+				mCurrentView->onShow();
+		});
+	} else { // arcade
+		// fade out, launch game, fade back in
+		auto fadeFunc = [this](float t) {
+			mFadeOpacity = Math::lerp(0.0f, 1.0f, t);
+		};
+		setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this, game, fadeFunc]
+		{
+			game->launchGame(mWindow);
+			setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
 			if (mCurrentView)
 				mCurrentView->onShow();
