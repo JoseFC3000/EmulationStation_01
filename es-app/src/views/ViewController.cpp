@@ -193,7 +193,6 @@ void ViewController::playViewTransition()
 			this->mCamera.translation() = -target;
 		}, 1));
 		updateHelpPrompts();
-	}
 	} else {
 		// arcade
 		// slide or simple slide
