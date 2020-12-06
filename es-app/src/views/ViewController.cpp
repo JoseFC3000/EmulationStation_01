@@ -196,12 +196,9 @@ void ViewController::playViewTransition()
 	}
 	} else {
 		// arcade
-		setAnimation(new LambdaAnimation(
-			[this, target](float /*t*/)
-		{
-			this->mCamera.translation() = -target;
-		}, 1));
-		updateHelpPrompts();
+		// slide or simple slide
+		setAnimation(new MoveCameraAnimation(mCamera, target));
+		updateHelpPrompts(); // update help prompts immediately
 	}
 }
 
