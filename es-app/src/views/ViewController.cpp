@@ -195,9 +195,13 @@ void ViewController::playViewTransition()
 		updateHelpPrompts();
 	} else {
 		// arcade
-		// slide or simple slide
-		setAnimation(new MoveCameraAnimation(mCamera, target));
-		updateHelpPrompts(); // update help prompts immediately
+		// instant
+		setAnimation(new LambdaAnimation(
+			[this, target](float /*t*/)
+		{
+			this->mCamera.translation() = -target;
+		}, 1));
+		updateHelpPrompts();
 	}
 }
 
@@ -235,10 +239,10 @@ void ViewController::launch(FileData* game, Vector3f center)
 		auto fadeFunc = [this](float t) {
 			mFadeOpacity = Math::lerp(0.0f, 1.0f, t);
 		};
-		setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this, game, fadeFunc]
+		setAnimation(new LambdaAnimation(fadeFunc, 100), 0, [this, game, fadeFunc]
 		{
 			game->launchGame(mWindow);
-			setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; }, true);
+			setAnimation(new LambdaAnimation(fadeFunc, 100), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
 			if (mCurrentView)
 				mCurrentView->onShow();
