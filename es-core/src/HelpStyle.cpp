@@ -10,7 +10,7 @@ HelpStyle::HelpStyle()
 	textColor = 0x969696FF;
 
 	if(FONT_SIZE_SMALL != 0)
-		font = Font::get(FONT_SIZE_SMALL);
+		font = Font::get(FONT_SIZE_HELP);
 	else
 		font = nullptr;
 }
