@@ -31,6 +31,12 @@ namespace FileSorts
 
 		FileData::SortType(&comparePublisher, true, "publisher, ascending"),
 		FileData::SortType(&comparePublisher, false, "publisher, descending"),
+		
+		FileData::SortType(&compareHardware, true, "hardware, ascending"),
+		FileData::SortType(&compareHardware, false, "hardware, descending"),
+
+		FileData::SortType(&compareRegion, true, "region, ascending"),
+		FileData::SortType(&compareRegion, false, "region, descending"),
 
 		FileData::SortType(&compareSystem, true, "system, ascending"),
 		FileData::SortType(&compareSystem, false, "system, descending")
@@ -107,6 +113,20 @@ namespace FileSorts
 		std::string publisher1 = Utils::String::toUpper(file1->metadata.get("publisher"));
 		std::string publisher2 = Utils::String::toUpper(file2->metadata.get("publisher"));
 		return publisher1.compare(publisher2) < 0;
+	}
+	
+	bool compareHardware(const FileData* file1, const FileData* file2)
+	{
+		std::string hardware1 = Utils::String::toUpper(file1->metadata.get("hardware"));
+		std::string hardware2 = Utils::String::toUpper(file2->metadata.get("hardware"));
+		return hardware1.compare(hardware2) < 0;
+	}
+	
+	bool compareRegion(const FileData* file1, const FileData* file2)
+	{
+		std::string region1 = Utils::String::toUpper(file1->metadata.get("region"));
+		std::string region2 = Utils::String::toUpper(file2->metadata.get("region"));
+		return region1.compare(region2) < 0;
 	}
 
 	bool compareSystem(const FileData* file1, const FileData* file2)
