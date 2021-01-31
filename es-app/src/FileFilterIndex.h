@@ -14,6 +14,8 @@ enum FilterIndexType
 	GENRE_FILTER,
 	PLAYER_FILTER,
 	PUBDEV_FILTER,
+	HARDWARE_FILTER,
+	REGION_FILTER,
 	RATINGS_FILTER,
 	FAVORITES_FILTER,
 	HIDDEN_FILTER,
@@ -43,7 +45,7 @@ public:
 	void clearAllFilters();
 	void debugPrintIndexes();
 	bool showFile(FileData* game);
-	bool isFiltered() { return (filterByGenre || filterByPlayers || filterByPubDev || filterByRatings || filterByFavorites || filterByHidden || filterByKidGame); };
+	bool isFiltered() { return (filterByGenre || filterByPlayers || filterByPubDev || filterByHardware || filterByRegion || filterByRatings || filterByFavorites || filterByHidden || filterByKidGame); };
 	bool isKeyBeingFilteredBy(std::string key, FilterIndexType type);
 	std::vector<FilterDataDecl>& getFilterDataDecls();
 
@@ -59,6 +61,8 @@ private:
 	void manageGenreEntryInIndex(FileData* game, bool remove = false);
 	void managePlayerEntryInIndex(FileData* game, bool remove = false);
 	void managePubDevEntryInIndex(FileData* game, bool remove = false);
+	void manageHardwareEntryInIndex(FileData* game, bool remove = false);
+	void manageRegionEntryInIndex(FileData* game, bool remove = false);
 	void manageRatingsEntryInIndex(FileData* game, bool remove = false);
 	void manageFavoritesEntryInIndex(FileData* game, bool remove = false);
 	void manageHiddenEntryInIndex(FileData* game, bool remove = false);
@@ -71,6 +75,8 @@ private:
 	bool filterByGenre;
 	bool filterByPlayers;
 	bool filterByPubDev;
+	bool filterByHardware;
+	bool filterByRegion;
 	bool filterByRatings;
 	bool filterByFavorites;
 	bool filterByHidden;
@@ -79,6 +85,8 @@ private:
 	std::map<std::string, int> genreIndexAllKeys;
 	std::map<std::string, int> playersIndexAllKeys;
 	std::map<std::string, int> pubDevIndexAllKeys;
+	std::map<std::string, int> hardwareIndexAllKeys;
+	std::map<std::string, int> regionIndexAllKeys;
 	std::map<std::string, int> ratingsIndexAllKeys;
 	std::map<std::string, int> favoritesIndexAllKeys;
 	std::map<std::string, int> hiddenIndexAllKeys;
@@ -87,6 +95,8 @@ private:
 	std::vector<std::string> genreIndexFilteredKeys;
 	std::vector<std::string> playersIndexFilteredKeys;
 	std::vector<std::string> pubDevIndexFilteredKeys;
+	std::vector<std::string> hardwareIndexFilteredKeys;
+	std::vector<std::string> regionIndexFilteredKeys;
 	std::vector<std::string> ratingsIndexFilteredKeys;
 	std::vector<std::string> favoritesIndexFilteredKeys;
 	std::vector<std::string> hiddenIndexFilteredKeys;
