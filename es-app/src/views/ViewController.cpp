@@ -157,7 +157,7 @@ void ViewController::playViewTransition()
 	{
 		// fade
 		// stop whatever's currently playing, leaving mFadeOpacity wherever it is
-		cancelAnimation(0);
+		// cancelAnimation(0);
 
 		auto fadeFunc = [this](float t) {
 			mFadeOpacity = Math::lerp(0, 1, t);
@@ -239,10 +239,10 @@ void ViewController::launch(FileData* game, Vector3f center)
 		auto fadeFunc = [this](float t) {
 			mFadeOpacity = Math::lerp(0.0f, 1.0f, t);
 		};
-		setAnimation(new LambdaAnimation(fadeFunc, 400), 0, [this, game, fadeFunc]
+		setAnimation(new LambdaAnimation(fadeFunc, 240), 0, [this, game, fadeFunc]
 		{
 			game->launchGame(mWindow);
-			setAnimation(new LambdaAnimation(fadeFunc, 400), 0, [this] { mLockInput = false; }, true);
+			setAnimation(new LambdaAnimation(fadeFunc, 240), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
 			if (mCurrentView)
 				mCurrentView->onShow();
