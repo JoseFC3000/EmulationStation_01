@@ -157,14 +157,14 @@ void ViewController::playViewTransition()
 	{
 		// fade
 		// stop whatever's currently playing, leaving mFadeOpacity wherever it is
-		// cancelAnimation(0);
+		cancelAnimation(0);
 
-		// auto fadeFunc = [this](float t) {
-		//	mFadeOpacity = Math::lerp(0, 1, t);
-		//};
+		auto fadeFunc = [this](float t) {
+			mFadeOpacity = Math::lerp(0, 1, t);
+		};
 
 		const static int FADE_DURATION = 240; // fade in/out time
-		const static int FADE_WAIT = 10; // time to wait between in/out
+		const static int FADE_WAIT = 320; // time to wait between in/out
 		setAnimation(new LambdaAnimation(fadeFunc, FADE_DURATION), 0, [this, fadeFunc, target] {
 			this->mCamera.translation() = -target;
 			updateHelpPrompts();
@@ -239,10 +239,10 @@ void ViewController::launch(FileData* game, Vector3f center)
 		auto fadeFunc = [this](float t) {
 			mFadeOpacity = Math::lerp(0.0f, 1.0f, t);
 		};
-		setAnimation(new LambdaAnimation(fadeFunc, 240), 0, [this, game, fadeFunc]
+		setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this, game, fadeFunc]
 		{
 			game->launchGame(mWindow);
-			setAnimation(new LambdaAnimation(fadeFunc, 240), 0, [this] { mLockInput = false; }, true);
+			setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
 			if (mCurrentView)
 				mCurrentView->onShow();
@@ -276,7 +276,7 @@ void ViewController::launch(FileData* game, Vector3f center)
 		setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this, game, fadeFunc]
 		{
 			game->launchGame(mWindow);
-			setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; }, true);
+			setAnimation(new LambdaAnimation(fadeFunc, 0), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
 			if (mCurrentView)
 				mCurrentView->onShow();
