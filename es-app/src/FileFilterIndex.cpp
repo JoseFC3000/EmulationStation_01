@@ -10,18 +10,20 @@
 #define INCLUDE_UNKNOWN false;
 
 FileFilterIndex::FileFilterIndex()
-	: filterByFavorites(false), filterByGenre(false), filterByHidden(false), filterByKidGame(false), filterByPlayers(false), filterByPubDev(false), filterByRatings(false)
+	: filterByFavorites(false), filterByGenre(false), filterByHidden(false), filterByKidGame(false), filterByPlayers(false), filterByPubDev(false), filterByHardware(false), filterByRegion(false), filterByRatings(false)
 {
 	clearAllFilters();
 	FilterDataDecl filterDecls[] = {
-		//type 				//allKeys 				//filteredBy 		//filteredKeys 				//primaryKey 	//hasSecondaryKey 	//secondaryKey 	//menuLabel
-		{ FAVORITES_FILTER, &favoritesIndexAllKeys, &filterByFavorites,	&favoritesIndexFilteredKeys,"favorite",		false,				"",				"FAVORITES"	},
-		{ GENRE_FILTER, 	&genreIndexAllKeys, 	&filterByGenre,		&genreIndexFilteredKeys, 	"genre",		true,				"genre",		"GENRE"	},
-		{ PLAYER_FILTER, 	&playersIndexAllKeys, 	&filterByPlayers,	&playersIndexFilteredKeys, 	"players",		false,				"",				"PLAYERS"	},
-		{ PUBDEV_FILTER, 	&pubDevIndexAllKeys, 	&filterByPubDev,	&pubDevIndexFilteredKeys, 	"developer",	true,				"publisher",	"PUBLISHER / DEVELOPER"	},
-		{ RATINGS_FILTER, 	&ratingsIndexAllKeys, 	&filterByRatings,	&ratingsIndexFilteredKeys, 	"rating",		false,				"",				"RATING"	},
-		{ KIDGAME_FILTER, 	&kidGameIndexAllKeys, 	&filterByKidGame,	&kidGameIndexFilteredKeys, 	"kidgame",		false,				"",				"KIDGAME" },
-		{ HIDDEN_FILTER, 	&hiddenIndexAllKeys, 	&filterByHidden,	&hiddenIndexFilteredKeys, 	"hidden",		false,				"",				"HIDDEN" }
+		//type 			//allKeys 		//filteredBy 		//filteredKeys 			//primaryKey 		//hasSecondaryKey 	//secondaryKey 		//menuLabel
+		{ FAVORITES_FILTER, 	&favoritesIndexAllKeys, &filterByFavorites,	&favoritesIndexFilteredKeys,	"favorite",		false,			"",			"FAVORITES" },
+		{ GENRE_FILTER, 	&genreIndexAllKeys, 	&filterByGenre,		&genreIndexFilteredKeys, 	"genre",		true,			"genre",		"GENRE"	},
+		{ PLAYER_FILTER, 	&playersIndexAllKeys, 	&filterByPlayers,	&playersIndexFilteredKeys, 	"players",		false,			"",			"PLAYERS" },
+		{ PUBDEV_FILTER, 	&pubDevIndexAllKeys, 	&filterByPubDev,	&pubDevIndexFilteredKeys, 	"developer",		true,			"publisher",		"PUBLISHER / DEVELOPER"	},
+		{ HARDWARE_FILTER, 	&hardwareIndexAllKeys, 	&filterByHardware,	&hardwareIndexFilteredKeys, 	"hardware",		true,			"hardware",		"HARDWARE" },
+		{ REGION_FILTER, 	&regionIndexAllKeys, 	&filterByRegion,	&regionIndexFilteredKeys, 	"region",		true,			"region",		"REGION" },
+		{ RATINGS_FILTER, 	&ratingsIndexAllKeys, 	&filterByRatings,	&ratingsIndexFilteredKeys, 	"rating",		false,			"",			"RATING" },
+		{ KIDGAME_FILTER, 	&kidGameIndexAllKeys, 	&filterByKidGame,	&kidGameIndexFilteredKeys, 	"kidgame",		false,			"",			"KIDGAME" },
+		{ HIDDEN_FILTER, 	&hiddenIndexAllKeys, 	&filterByHidden,	&hiddenIndexFilteredKeys, 	"hidden",		false,			"",			"HIDDEN" }
 	};
 
 	filterDataDecl = std::vector<FilterDataDecl>(filterDecls, filterDecls + sizeof(filterDecls) / sizeof(filterDecls[0]));
@@ -49,6 +51,8 @@ void FileFilterIndex::importIndex(FileFilterIndex* indexToImport)
 		{ &genreIndexAllKeys, &(indexToImport->genreIndexAllKeys) },
 		{ &playersIndexAllKeys, &(indexToImport->playersIndexAllKeys) },
 		{ &pubDevIndexAllKeys, &(indexToImport->pubDevIndexAllKeys) },
+		{ &hardwareIndexAllKeys, &(indexToImport->hardwareIndexAllKeys) },
+		{ &regionIndexAllKeys, &(indexToImport->regionIndexAllKeys) },
 		{ &ratingsIndexAllKeys, &(indexToImport->ratingsIndexAllKeys) },
 		{ &favoritesIndexAllKeys, &(indexToImport->favoritesIndexAllKeys) },
 		{ &hiddenIndexAllKeys, &(indexToImport->hiddenIndexAllKeys) },
@@ -79,6 +83,8 @@ void FileFilterIndex::resetIndex()
 	clearIndex(genreIndexAllKeys);
 	clearIndex(playersIndexAllKeys);
 	clearIndex(pubDevIndexAllKeys);
+	clearIndex(hardwareIndexAllKeys);
+	clearIndex(regionIndexAllKeys);
 	clearIndex(ratingsIndexAllKeys);
 	clearIndex(favoritesIndexAllKeys);
 	clearIndex(hiddenIndexAllKeys);
@@ -126,6 +132,44 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 				key = Utils::String::toUpper(game->metadata.get("developer"));
 			else
 				key = Utils::String::toUpper(game->metadata.get("publisher"));
+			break;
+		}
+		case HARDWARE_FILTER:
+		{
+			key = Utils::String::toUpper(game->metadata.get("hardware"));
+			key = Utils::String::trim(key);
+			if (getSecondary && !key.empty()) {
+				std::istringstream f(key);
+				std::string newKey;
+				getline(f, newKey, '/');
+				if (!newKey.empty() && newKey != key)
+				{
+					key = newKey;
+				}
+				else
+				{
+					key = std::string();
+				}
+			}
+			break;
+		}
+		case REGION_FILTER:
+		{
+			key = Utils::String::toUpper(game->metadata.get("region"));
+			key = Utils::String::trim(key);
+			if (getSecondary && !key.empty()) {
+				std::istringstream f(key);
+				std::string newKey;
+				getline(f, newKey, '/');
+				if (!newKey.empty() && newKey != key)
+				{
+					key = newKey;
+				}
+				else
+				{
+					key = std::string();
+				}
+			}
 			break;
 		}
 		case RATINGS_FILTER:
@@ -184,6 +228,8 @@ void FileFilterIndex::addToIndex(FileData* game)
 	manageGenreEntryInIndex(game);
 	managePlayerEntryInIndex(game);
 	managePubDevEntryInIndex(game);
+	manageHardwareEntryInIndex(game);
+	manageRegionEntryInIndex(game);
 	manageRatingsEntryInIndex(game);
 	manageFavoritesEntryInIndex(game);
 	manageHiddenEntryInIndex(game);
@@ -195,6 +241,8 @@ void FileFilterIndex::removeFromIndex(FileData* game)
 	manageGenreEntryInIndex(game, true);
 	managePlayerEntryInIndex(game, true);
 	managePubDevEntryInIndex(game, true);
+	manageHardwareEntryInIndex(game, true);
+	manageRegionEntryInIndex(game, true);
 	manageRatingsEntryInIndex(game, true);
 	manageFavoritesEntryInIndex(game, true);
 	manageHiddenEntryInIndex(game, true);
@@ -278,6 +326,12 @@ void FileFilterIndex::debugPrintIndexes()
 	for (auto x: pubDevIndexAllKeys) {
 		LOG(LogInfo) << "PubDev Index: " << x.first << ": " << x.second;
 	}
+	for (auto x: hardwareIndexAllKeys) {
+		LOG(LogInfo) << "Hardware Index: " << x.first << ": " << x.second;
+	}
+	for (auto x: regionIndexAllKeys) {
+		LOG(LogInfo) << "Region Index: " << x.first << ": " << x.second;
+	}
 	for (auto x: favoritesIndexAllKeys) {
 		LOG(LogInfo) << "Favorites Index: " << x.first << ": " << x.second;
 	}
@@ -346,10 +400,10 @@ bool FileFilterIndex::showFile(FileData* game)
 
 bool FileFilterIndex::isKeyBeingFilteredBy(std::string key, FilterIndexType type)
 {
-	const FilterIndexType filterTypes[7] = { FAVORITES_FILTER, GENRE_FILTER, PLAYER_FILTER, PUBDEV_FILTER, RATINGS_FILTER,HIDDEN_FILTER, KIDGAME_FILTER };
-	std::vector<std::string> filterKeysList[7] = { favoritesIndexFilteredKeys, genreIndexFilteredKeys, playersIndexFilteredKeys, pubDevIndexFilteredKeys, ratingsIndexFilteredKeys, hiddenIndexFilteredKeys, kidGameIndexFilteredKeys };
+	const FilterIndexType filterTypes[9] = { FAVORITES_FILTER, GENRE_FILTER, PLAYER_FILTER, PUBDEV_FILTER, HARDWARE_FILTER, REGION_FILTER, RATINGS_FILTER,HIDDEN_FILTER, KIDGAME_FILTER };
+	std::vector<std::string> filterKeysList[9] = { favoritesIndexFilteredKeys, genreIndexFilteredKeys, playersIndexFilteredKeys, pubDevIndexFilteredKeys, hardwareIndexFilteredKeys, regionIndexFilteredKeys, ratingsIndexFilteredKeys, hiddenIndexFilteredKeys, kidGameIndexFilteredKeys };
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		if (filterTypes[i] == type)
 		{
@@ -441,6 +495,52 @@ void FileFilterIndex::managePubDevEntryInIndex(FileData* game, bool remove)
 			// if no info at all
 			manageIndexEntry(&pubDevIndexAllKeys, pub, remove);
 		}
+	}
+}
+
+void FileFilterIndex::manageHardwareEntryInIndex(FileData* game, bool remove)
+{
+
+	std::string key = getIndexableKey(game, HARDWARE_FILTER, false);
+
+	// flag for including unknowns
+	bool includeUnknown = INCLUDE_UNKNOWN;
+
+	// only add unknown in pubdev IF both dev and pub are empty
+	if (!includeUnknown && (key == UNKNOWN_LABEL || key == "BIOS")) {
+		// no valid genre info found
+		return;
+	}
+
+	manageIndexEntry(&hardwareIndexAllKeys, key, remove);
+
+	key = getIndexableKey(game, HARDWARE_FILTER, true);
+	if (!includeUnknown && key == UNKNOWN_LABEL)
+	{
+		manageIndexEntry(&hardwareIndexAllKeys, key, remove);
+	}
+}
+
+void FileFilterIndex::manageRegionEntryInIndex(FileData* game, bool remove)
+{
+
+	std::string key = getIndexableKey(game, REGION_FILTER, false);
+
+	// flag for including unknowns
+	bool includeUnknown = INCLUDE_UNKNOWN;
+
+	// only add unknown in pubdev IF both dev and pub are empty
+	if (!includeUnknown && (key == UNKNOWN_LABEL || key == "BIOS")) {
+		// no valid genre info found
+		return;
+	}
+
+	manageIndexEntry(&regionIndexAllKeys, key, remove);
+
+	key = getIndexableKey(game, REGION_FILTER, true);
+	if (!includeUnknown && key == UNKNOWN_LABEL)
+	{
+		manageIndexEntry(&regionIndexAllKeys, key, remove);
 	}
 }
 
