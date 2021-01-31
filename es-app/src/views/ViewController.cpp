@@ -159,9 +159,9 @@ void ViewController::playViewTransition()
 		// stop whatever's currently playing, leaving mFadeOpacity wherever it is
 		// cancelAnimation(0);
 
-		auto fadeFunc = [this](float t) {
-			mFadeOpacity = Math::lerp(0, 1, t);
-		};
+		// auto fadeFunc = [this](float t) {
+		//	mFadeOpacity = Math::lerp(0, 1, t);
+		//};
 
 		const static int FADE_DURATION = 240; // fade in/out time
 		const static int FADE_WAIT = 10; // time to wait between in/out
