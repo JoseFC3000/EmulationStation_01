@@ -504,12 +504,12 @@ void FileFilterIndex::managePlayerEntryInIndex(FileData* game, bool remove)
 		return;
 	}
 
-	manageIndexEntry(&genreIndexAllKeys, key, remove);
+	manageIndexEntry(&playersIndexAllKeys, key, remove);
 
 	key = getIndexableKey(game, PLAYER_FILTER, true);
 	if (!includeUnknown && key == UNKNOWN_LABEL)
 	{
-		manageIndexEntry(&genreIndexAllKeys, key, remove);
+		manageIndexEntry(&playersIndexAllKeys, key, remove);
 	}
 }
 
@@ -527,12 +527,12 @@ void FileFilterIndex::managePublisherEntryInIndex(FileData* game, bool remove)
 		return;
 	}
 
-	manageIndexEntry(&genreIndexAllKeys, key, remove);
+	manageIndexEntry(&publisherIndexAllKeys, key, remove);
 
 	key = getIndexableKey(game, PUBLISHER_FILTER, true);
 	if (!includeUnknown && key == UNKNOWN_LABEL)
 	{
-		manageIndexEntry(&genreIndexAllKeys, key, remove);
+		manageIndexEntry(&publisherIndexAllKeys, key, remove);
 	}
 }
 
@@ -550,12 +550,12 @@ void FileFilterIndex::manageDeveloperEntryInIndex(FileData* game, bool remove)
 		return;
 	}
 
-	manageIndexEntry(&genreIndexAllKeys, key, remove);
+	manageIndexEntry(&developerIndexAllKeys, key, remove);
 
 	key = getIndexableKey(game, DEVELOPER_FILTER, true);
 	if (!includeUnknown && key == UNKNOWN_LABEL)
 	{
-		manageIndexEntry(&genreIndexAllKeys, key, remove);
+		manageIndexEntry(&developerIndexAllKeys, key, remove);
 	}
 }
 
