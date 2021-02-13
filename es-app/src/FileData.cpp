@@ -173,7 +173,7 @@ const std::string FileData::getImagePath() const
 
 const std::string FileData::getImage2Path() const
 {
-	std::string image = metadata.get("image2");
+	std::string image2 = metadata.get("image2");
 
 	// no image, try to use local image
 	if(image2.empty())
