@@ -371,8 +371,8 @@ void VideoGameListView::launch(FileData* game)
 		target = Vector3f(mImage.getCenter().x(), mImage.getCenter().y(), 0);
 	}
 	else if(mImage2.hasImage() &&
-		(mImage2.getPosition().x() < screenWidth && mImage.getPosition().x() > 2.0f &&
-		 mImage2.getPosition().y() < screenHeight && mImage.getPosition().y() > 2.0f))
+		(mImage2.getPosition().x() < screenWidth && mImage2.getPosition().x() > 2.0f &&
+		 mImage2.getPosition().y() < screenHeight && mImage2.getPosition().y() > 2.0f))
 	{
 		target = Vector3f(mImage2.getCenter().x(), mImage2.getCenter().y(), 0);
 	}
