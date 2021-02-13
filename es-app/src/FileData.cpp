@@ -171,6 +171,28 @@ const std::string FileData::getImagePath() const
 	return image;
 }
 
+const std::string FileData::getImage2Path() const
+{
+	std::string image = metadata.get("image2");
+
+	// no image, try to use local image
+	if(image2.empty())
+	{
+		const char* extList[2] = { ".png", ".jpg" };
+		for(int i = 0; i < 2; i++)
+		{
+			if(image2.empty())
+			{
+				std::string path = mEnvData->mStartPath + "/images/" + getDisplayName() + "-image2" + extList[i];
+				if(Utils::FileSystem::exists(path))
+					image2 = path;
+			}
+		}
+	}
+
+	return image2;
+}
+
 std::vector<FileData*> FileData::getFilesRecursive(unsigned int typeMask, bool displayedOnly) const
 {
 	std::vector<FileData*> out;
