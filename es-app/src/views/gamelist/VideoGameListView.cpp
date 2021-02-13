@@ -17,6 +17,7 @@ VideoGameListView::VideoGameListView(Window* window, FileData* root) :
 	mThumbnail(window),
 	mMarquee(window),
 	mImage(window),
+	mImage2(window),
 	mVideo(nullptr),
 	mVideoPlaying(false),
 
@@ -67,6 +68,15 @@ VideoGameListView::VideoGameListView(Window* window, FileData* root) :
 	mImage.setMaxSize(1.0f, 1.0f);
 	mImage.setDefaultZIndex(30);
 	addChild(&mImage);
+	
+	// Image2
+	mImage2.setOrigin(0.5f, 0.5f);
+	// Default to off the screen
+	mImage2.setPosition(2.0f, 2.0f);
+	mImage2.setVisible(false);
+	mImage2.setMaxSize(1.0f, 1.0f);
+	mImage2.setDefaultZIndex(30);
+	addChild(&mImage2);
 
 	// video
 	mVideo->setOrigin(0.5f, 0.5f);
@@ -145,6 +155,7 @@ void VideoGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 	mThumbnail.applyTheme(theme, getName(), "md_thumbnail", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
 	mMarquee.applyTheme(theme, getName(), "md_marquee", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
 	mImage.applyTheme(theme, getName(), "md_image", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
+	mImage2.applyTheme(theme, getName(), "md_image2", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
 	mVideo->applyTheme(theme, getName(), "md_video", POSITION | ThemeFlags::SIZE | ThemeFlags::DELAY | Z_INDEX | ROTATION | VISIBLE);
 	mName.applyTheme(theme, getName(), "md_name", ALL);
 
@@ -279,6 +290,7 @@ void VideoGameListView::updateInfoPanel()
 		mThumbnail.setImage(file->getThumbnailPath());
 		mMarquee.setImage(file->getMarqueePath());
 		mImage.setImage(file->getImagePath());
+		mImage2.setImage(file->getImage2Path());
 
 		mDescription.setText(file->metadata.get("desc"));
 		mDescContainer.reset();
@@ -309,6 +321,7 @@ void VideoGameListView::updateInfoPanel()
 	comps.push_back(mVideo);
 	comps.push_back(&mDescription);
 	comps.push_back(&mImage);
+	comps.push_back(&mImage2);
 	comps.push_back(&mName);
 	std::vector<TextComponent*> labels = getMDLabels();
 	comps.insert(comps.cend(), labels.cbegin(), labels.cend());
@@ -356,6 +369,12 @@ void VideoGameListView::launch(FileData* game)
 		 mImage.getPosition().y() < screenHeight && mImage.getPosition().y() > 2.0f))
 	{
 		target = Vector3f(mImage.getCenter().x(), mImage.getCenter().y(), 0);
+	}
+	else if(mImage2.hasImage() &&
+		(mImage2.getPosition().x() < screenWidth && mImage.getPosition().x() > 2.0f &&
+		 mImage2.getPosition().y() < screenHeight && mImage.getPosition().y() > 2.0f))
+	{
+		target = Vector3f(mImage2.getCenter().x(), mImage2.getCenter().y(), 0);
 	}
 	else if(mHeaderImage.hasImage() &&
 		(mHeaderImage.getPosition().x() < screenWidth && mHeaderImage.getPosition().x() > 0.0f &&
