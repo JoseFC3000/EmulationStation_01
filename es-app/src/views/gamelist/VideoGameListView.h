@@ -35,6 +35,7 @@ private:
 	ImageComponent mMarquee;
 	VideoComponent* mVideo;
 	ImageComponent mImage;
+	Image2Component mImage2;
 
 	TextComponent mLblRating, mLblReleaseDate, mLblDeveloper, mLblPublisher, mLblHardware, mLblRegion, mLblInformation, mLblGenre, mLblPlayers, mLblLastPlayed, mLblPlayCount;
 
