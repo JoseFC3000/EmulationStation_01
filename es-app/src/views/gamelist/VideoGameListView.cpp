@@ -294,7 +294,7 @@ void VideoGameListView::updateInfoPanel()
 		mThumbnail.setImage(file->getThumbnailPath());
 		mMarquee.setImage(file->getMarqueePath());
 		mImage.setImage(file->getImagePath());
-		mHardwareLogo.setImage(file->getHardwarelogoPath());
+		mHardwareLogo.setImage(file->getHardwareLogoPath());
 
 		mDescription.setText(file->metadata.get("desc"));
 		mDescContainer.reset();
