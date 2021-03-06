@@ -17,14 +17,14 @@ VideoGameListView::VideoGameListView(Window* window, FileData* root) :
 	mThumbnail(window),
 	mMarquee(window),
 	mImage(window),
-	mImage2(window),
+	mHardwareLogo(window),
 	mVideo(nullptr),
 	mVideoPlaying(false),
 
-	mLblRating(window), mLblReleaseDate(window), mLblDeveloper(window), mLblPublisher(window), mLblHardware(window), mLblRegion(window), mLblInformation(window),
+	mLblRating(window), mLblReleaseDate(window), mLblDeveloper(window), mLblDeveloper2(window), mLblPublisher(window), mLblHardware(window), mLblRegion(window), mLblInformation(window),
 	mLblGenre(window), mLblPlayers(window), mLblLastPlayed(window), mLblPlayCount(window),
 
-	mRating(window), mReleaseDate(window), mDeveloper(window), mPublisher(window), mHardware(window), mRegion(window), mInformation(window),
+	mRating(window), mReleaseDate(window), mDeveloper(window), mDeveloper2(window), mPublisher(window), mHardware(window), mRegion(window), mInformation(window),
 	mGenre(window), mPlayers(window), mLastPlayed(window), mPlayCount(window),
 	mName(window)
 {
@@ -69,14 +69,14 @@ VideoGameListView::VideoGameListView(Window* window, FileData* root) :
 	mImage.setDefaultZIndex(30);
 	addChild(&mImage);
 	
-	// Image2
-	mImage2.setOrigin(0.5f, 0.5f);
+	// HardwareLogo
+	mHardwareLogo.setOrigin(0.5f, 0.5f);
 	// Default to off the screen
-	mImage2.setPosition(2.0f, 2.0f);
-	mImage2.setVisible(false);
-	mImage2.setMaxSize(1.0f, 1.0f);
-	mImage2.setDefaultZIndex(30);
-	addChild(&mImage2);
+	mHardwareLogo.setPosition(2.0f, 2.0f);
+	mHardwareLogo.setVisible(false);
+	mHardwareLogo.setMaxSize(1.0f, 1.0f);
+	mHardwareLogo.setDefaultZIndex(30);
+	addChild(&mHardwareLogo);
 
 	// video
 	mVideo->setOrigin(0.5f, 0.5f);
@@ -92,9 +92,12 @@ VideoGameListView::VideoGameListView(Window* window, FileData* root) :
 	mLblReleaseDate.setText("Released: ");
 	addChild(&mLblReleaseDate);
 	addChild(&mReleaseDate);
-	mLblDeveloper.setText("Developer: ");
+	mLblDeveloper.setText("1st Developer: ");
 	addChild(&mLblDeveloper);
 	addChild(&mDeveloper);
+	mLblDeveloper2.setText("2nd Developer: ");
+	addChild(&mLblDeveloper2);
+	addChild(&mDeveloper2);	
 	mLblPublisher.setText("Publisher: ");
 	addChild(&mLblPublisher);
 	addChild(&mPublisher);
@@ -155,15 +158,15 @@ void VideoGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 	mThumbnail.applyTheme(theme, getName(), "md_thumbnail", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
 	mMarquee.applyTheme(theme, getName(), "md_marquee", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
 	mImage.applyTheme(theme, getName(), "md_image", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
-	mImage2.applyTheme(theme, getName(), "md_image2", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
+	mHardwareLogo.applyTheme(theme, getName(), "md_hardwarelogo", POSITION | ThemeFlags::SIZE | Z_INDEX | ROTATION | VISIBLE);
 	mVideo->applyTheme(theme, getName(), "md_video", POSITION | ThemeFlags::SIZE | ThemeFlags::DELAY | Z_INDEX | ROTATION | VISIBLE);
 	mName.applyTheme(theme, getName(), "md_name", ALL);
 
 	initMDLabels();
 	std::vector<TextComponent*> labels = getMDLabels();
-	assert(labels.size() == 11);
-	const char* lblElements[11] = {
-		"md_lbl_rating", "md_lbl_releasedate", "md_lbl_developer", "md_lbl_publisher", "md_lbl_hardware", "md_lbl_region", "md_lbl_information",
+	assert(labels.size() == 12);
+	const char* lblElements[12] = {
+		"md_lbl_rating", "md_lbl_releasedate", "md_lbl_developer", "md_lbl_developer2", "md_lbl_publisher", "md_lbl_hardware", "md_lbl_region", "md_lbl_information",
 		"md_lbl_genre", "md_lbl_players", "md_lbl_lastplayed", "md_lbl_playcount"
 	};
 
@@ -175,9 +178,9 @@ void VideoGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 
 	initMDValues();
 	std::vector<GuiComponent*> values = getMDValues();
-	assert(values.size() == 11);
-	const char* valElements[11] = {
-		"md_rating", "md_releasedate", "md_developer", "md_publisher", "md_hardware", "md_region", "md_information",
+	assert(values.size() == 12);
+	const char* valElements[12] = {
+		"md_rating", "md_releasedate", "md_developer", "md_developer2", "md_publisher", "md_hardware", "md_region", "md_information",
 		"md_genre", "md_players", "md_lastplayed", "md_playcount"
 	};
 
@@ -233,6 +236,7 @@ void VideoGameListView::initMDValues()
 	mRating.setSize(defaultFont->getHeight() * 5.0f, (float)defaultFont->getHeight());
 	mReleaseDate.setFont(defaultFont);
 	mDeveloper.setFont(defaultFont);
+	mDeveloper2.setFont(defaultFont);
 	mPublisher.setFont(defaultFont);
 	mHardware.setFont(defaultFont);
 	mRegion.setFont(defaultFont);
@@ -290,7 +294,7 @@ void VideoGameListView::updateInfoPanel()
 		mThumbnail.setImage(file->getThumbnailPath());
 		mMarquee.setImage(file->getMarqueePath());
 		mImage.setImage(file->getImagePath());
-		mImage2.setImage(file->getImage2Path());
+		mHardwareLogo.setImage(file->getHardwareLogoPath());
 
 		mDescription.setText(file->metadata.get("desc"));
 		mDescContainer.reset();
@@ -298,6 +302,7 @@ void VideoGameListView::updateInfoPanel()
 		mRating.setValue(file->metadata.get("rating"));
 		mReleaseDate.setValue(file->metadata.get("releasedate"));
 		mDeveloper.setValue(file->metadata.get("developer"));
+		mDeveloper2.setValue(file->metadata.get("developer2"));
 		mPublisher.setValue(file->metadata.get("publisher"));
 		mHardware.setValue(file->metadata.get("hardware"));
 		mRegion.setValue(file->metadata.get("region"));
@@ -321,7 +326,7 @@ void VideoGameListView::updateInfoPanel()
 	comps.push_back(mVideo);
 	comps.push_back(&mDescription);
 	comps.push_back(&mImage);
-	comps.push_back(&mImage2);
+	comps.push_back(&mHardwareLogo);
 	comps.push_back(&mName);
 	std::vector<TextComponent*> labels = getMDLabels();
 	comps.insert(comps.cend(), labels.cbegin(), labels.cend());
@@ -370,11 +375,11 @@ void VideoGameListView::launch(FileData* game)
 	{
 		target = Vector3f(mImage.getCenter().x(), mImage.getCenter().y(), 0);
 	}
-	else if(mImage2.hasImage() &&
-		(mImage2.getPosition().x() < screenWidth && mImage2.getPosition().x() > 2.0f &&
-		 mImage2.getPosition().y() < screenHeight && mImage2.getPosition().y() > 2.0f))
+	else if(mHardwareLogo.hasImage() &&
+		(mHardwareLogo.getPosition().x() < screenWidth && mHardwareLogo.getPosition().x() > 2.0f &&
+		 mHardwareLogo.getPosition().y() < screenHeight && mHardwareLogo.getPosition().y() > 2.0f))
 	{
-		target = Vector3f(mImage2.getCenter().x(), mImage2.getCenter().y(), 0);
+		target = Vector3f(mHardwareLogo.getCenter().x(), mHardwareLogo.getCenter().y(), 0);
 	}
 	else if(mHeaderImage.hasImage() &&
 		(mHeaderImage.getPosition().x() < screenWidth && mHeaderImage.getPosition().x() > 0.0f &&
@@ -397,6 +402,7 @@ std::vector<TextComponent*> VideoGameListView::getMDLabels()
 	ret.push_back(&mLblRating);
 	ret.push_back(&mLblReleaseDate);
 	ret.push_back(&mLblDeveloper);
+	ret.push_back(&mLblDeveloper2);
 	ret.push_back(&mLblPublisher);
 	ret.push_back(&mLblHardware);
 	ret.push_back(&mLblRegion);
@@ -414,6 +420,7 @@ std::vector<GuiComponent*> VideoGameListView::getMDValues()
 	ret.push_back(&mRating);
 	ret.push_back(&mReleaseDate);
 	ret.push_back(&mDeveloper);
+	ret.push_back(&mDeveloper2);
 	ret.push_back(&mPublisher);
 	ret.push_back(&mHardware);
 	ret.push_back(&mRegion);
