@@ -171,26 +171,26 @@ const std::string FileData::getImagePath() const
 	return image;
 }
 
-const std::string FileData::getImage2Path() const
+const std::string FileData::getHardwareLogoPath() const
 {
-	std::string image2 = metadata.get("image2");
+	std::string hardwarelogo = metadata.get("hardwarelogo");
 
 	// no image, try to use local image
-	if(image2.empty())
+	if(hardwarelogo.empty())
 	{
 		const char* extList[2] = { ".png", ".jpg" };
 		for(int i = 0; i < 2; i++)
 		{
-			if(image2.empty())
+			if(hardwarelogo.empty())
 			{
-				std::string path = mEnvData->mStartPath + "/images/" + getDisplayName() + "-image2" + extList[i];
+				std::string path = mEnvData->mStartPath + "/images/" + getDisplayName() + "-hardwarelogo" + extList[i];
 				if(Utils::FileSystem::exists(path))
-					image2 = path;
+					hardwarelogo = path;
 			}
 		}
 	}
 
-	return image2;
+	return hardwarelogo;
 }
 
 std::vector<FileData*> FileData::getFilesRecursive(unsigned int typeMask, bool displayedOnly) const
