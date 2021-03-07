@@ -31,6 +31,8 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 	
 	if (isFullUI)
 		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
+	
+	addEntry("UI SETTINGS 2", 0x777777FF, true, [this] { openUISettings2(); });
 
 	if (isFullUI)
 		addEntry("GAME COLLECTION SETTINGS", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
@@ -370,6 +372,88 @@ void GuiMenu::openUISettings()
 	s->addSaveFunc([disable_start] { Settings::getInstance()->setBool("DisableKidStartMenu", disable_start->getState()); });
 
 	mWindow->pushGui(s);
+
+}
+
+void GuiMenu::openUISettings2()
+{
+	auto s = new GuiSettings(mWindow, "UI SETTINGS 2");
+
+	// quick system select (left/right in game list view)
+	auto quick_sys_select = std::make_shared<SwitchComponent>(mWindow);
+	quick_sys_select->setState(Settings::getInstance()->getBool("QuickSystemSelect"));
+	s->addWithLabel("QUICK SYSTEM SELECT", quick_sys_select);
+	s->addSaveFunc([quick_sys_select] { Settings::getInstance()->setBool("QuickSystemSelect", quick_sys_select->getState()); });
+
+	// carousel transition option
+	auto move_carousel = std::make_shared<SwitchComponent>(mWindow);
+	move_carousel->setState(Settings::getInstance()->getBool("MoveCarousel"));
+	s->addWithLabel("CAROUSEL TRANSITIONS", move_carousel);
+	s->addSaveFunc([move_carousel] {
+		if (move_carousel->getState()
+			&& !Settings::getInstance()->getBool("MoveCarousel")
+			&& PowerSaver::getMode() == PowerSaver::INSTANT)
+		{
+			Settings::getInstance()->setString("PowerSaverMode", "default");
+			PowerSaver::init();
+		}
+		Settings::getInstance()->setBool("MoveCarousel", move_carousel->getState());
+	});
+
+	// theme set
+	auto themeSets = ThemeData::getThemeSets();
+
+	if(!themeSets.empty())
+	{
+		std::map<std::string, ThemeSet>::const_iterator selectedSet = themeSets.find(Settings::getInstance()->getString("ThemeSet"));
+		if(selectedSet == themeSets.cend())
+			selectedSet = themeSets.cbegin();
+
+		auto theme_set = std::make_shared< OptionListComponent<std::string> >(mWindow, "REGION SET", false);
+		for(auto it = themeSets.cbegin(); it != themeSets.cend(); it++)
+			theme_set->add(it->first, it->first, it == selectedSet);
+		s->addWithLabel("THEME SET", theme_set);
+
+		Window* window = mWindow;
+		s->addSaveFunc([window, theme_set]
+		{
+			bool needReload = false;
+			std::string oldTheme = Settings::getInstance()->getString("ThemeSet");
+			if(oldTheme != theme_set->getSelected())
+				needReload = true;
+
+			Settings::getInstance()->setString("ThemeSet", theme_set->getSelected());
+
+			if(needReload)
+			{
+				Scripting::fireEvent("theme-changed", theme_set->getSelected(), oldTheme);
+				CollectionSystemManager::get()->updateSystemsList();
+				ViewController::get()->goToStart();
+				ViewController::get()->reloadAll(); // TODO - replace this with some sort of signal-based implementation
+			}
+		});
+	}
+
+	// Optionally start in selected system
+	auto systemfocus_list = std::make_shared< OptionListComponent<std::string> >(mWindow, "START ON SYSTEM", false);
+	systemfocus_list->add("NONE", "", Settings::getInstance()->getString("StartupSystem") == "");
+	for (auto it = SystemData::sSystemVector.cbegin(); it != SystemData::sSystemVector.cend(); it++)
+	{
+		if ("retropie" != (*it)->getName())
+		{
+			systemfocus_list->add((*it)->getName(), (*it)->getName(), Settings::getInstance()->getString("StartupSystem") == (*it)->getName());
+		}
+	}
+	s->addWithLabel("START ON SYSTEM", systemfocus_list);
+	s->addSaveFunc([systemfocus_list] {
+		Settings::getInstance()->setString("StartupSystem", systemfocus_list->getSelected());
+	});
+
+	// show help
+	auto show_help = std::make_shared<SwitchComponent>(mWindow);
+	show_help->setState(Settings::getInstance()->getBool("ShowHelpPrompts"));
+	s->addWithLabel("ON-SCREEN HELP", show_help);
+	s->addSaveFunc([show_help] { Settings::getInstance()->setBool("ShowHelpPrompts", show_help->getState()); });
 
 }
 
