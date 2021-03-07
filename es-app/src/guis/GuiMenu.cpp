@@ -28,8 +28,9 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		addEntry("SCRAPER", 0x777777FF, true, [this] { openScraperSettings(); });
 
 	addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
-
-	addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
+	
+	if (isFullUI)
+		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
 
 	if (isFullUI)
 		addEntry("GAME COLLECTION SETTINGS", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
