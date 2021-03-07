@@ -26,6 +26,7 @@ private:
 	void openScreensaverOptions();
 	void openSoundSettings();
 	void openUISettings();
+	void openUISettings2();
 
 	MenuComponent mMenu;
 	TextComponent mVersion;
