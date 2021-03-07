@@ -29,9 +29,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 	addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
 
-
-	if (isFullUI)
-		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
+	addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
 
 	if (isFullUI)
 		addEntry("GAME COLLECTION SETTINGS", 0x777777FF, true, [this] { openCollectionSystemSettings(); });
