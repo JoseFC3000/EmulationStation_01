@@ -139,7 +139,7 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 		}
 		case PUBLISHER_FILTER:
 		{
-			key = (game->metadata.get("publisher"));
+			key = Utils::String::toUpper(game->metadata.get("publisher"));
 			key = Utils::String::trim(key);
 			if (getSecondary && !key.empty()) {
 				std::istringstream f(key);
