@@ -412,7 +412,7 @@ void GuiMenu::openUISettings2()
 		auto theme_set = std::make_shared< OptionListComponent<std::string> >(mWindow, "REGION SET", false);
 		for(auto it = themeSets.cbegin(); it != themeSets.cend(); it++)
 			theme_set->add(it->first, it->first, it == selectedSet);
-		s->addWithLabel("THEME SET", theme_set);
+		s->addWithLabel("REGION SET", theme_set);
 
 		Window* window = mWindow;
 		s->addSaveFunc([window, theme_set]
