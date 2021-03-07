@@ -18,7 +18,7 @@ FileFilterIndex::FileFilterIndex()
 		{ FAVORITES_FILTER, 	&favoritesIndexAllKeys, &filterByFavorites,	&favoritesIndexFilteredKeys,	"favorite",		false,			"",			"FAVORITES" },
 		{ GENRE_FILTER, 	&genreIndexAllKeys, 	&filterByGenre,		&genreIndexFilteredKeys, 	"genre",		true,			"genre",		"GENRE"	},
 		{ PLAYER_FILTER, 	&playersIndexAllKeys, 	&filterByPlayers,	&playersIndexFilteredKeys, 	"players",		true,			"players",		"PLAYERS" },
-		{ PUBLISHER_FILTER, 	&publisherIndexAllKeys, &filterByPublisher,	&publisherIndexFilteredKeys, 	"publisher",		true,			"publisher",		"Publisher" },
+		{ PUBLISHER_FILTER, 	&publisherIndexAllKeys, &filterByPublisher,	&publisherIndexFilteredKeys, 	"publisher",		true,			"publisher",		"PUBLISHER" },
 		{ DEVELOPER_FILTER, 	&developerIndexAllKeys, &filterByDeveloper,	&developerIndexFilteredKeys, 	"developer",		true,			"developer2",		"DEVELOPER" },
 		{ HARDWARE_FILTER, 	&hardwareIndexAllKeys, 	&filterByHardware,	&hardwareIndexFilteredKeys, 	"hardware",		true,			"hardware",		"HARDWARE" },
 		{ REGION_FILTER, 	&regionIndexAllKeys, 	&filterByRegion,	&regionIndexFilteredKeys, 	"region",		true,			"region",		"REGION" },
@@ -139,7 +139,7 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 		}
 		case PUBLISHER_FILTER:
 		{
-			key = Utils::String::toLower(game->metadata.get("publisher"));
+			key = Utils::String::(game->metadata.get("publisher"));
 			key = Utils::String::trim(key);
 			if (getSecondary && !key.empty()) {
 				std::istringstream f(key);
