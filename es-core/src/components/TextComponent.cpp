@@ -157,11 +157,11 @@ void TextComponent::calculateExtent()
 {
 	if(mAutoCalcExtent.x())
 	{
-		mSize = mFont->sizeText(mUppercase ? std::string(mText) : mText, mLineSpacing);
+		mSize = mFont->sizeText(mUppercase ? Utils::String::toUpper(mText) : mText, mLineSpacing);
 	}else{
 		if(mAutoCalcExtent.y())
 		{
-			mSize[1] = mFont->sizeWrappedText(mUppercase ? std::string(mText) : mText, getSize().x(), mLineSpacing).y();
+			mSize[1] = mFont->sizeWrappedText(mUppercase ? Utils::String::toUpper(mText) : mText, getSize().x(), mLineSpacing).y();
 		}
 	}
 }
@@ -176,7 +176,7 @@ void TextComponent::onTextChanged()
 		return;
 	}
 
-	std::string text = mUppercase ? std::string(mText) : mText;
+	std::string text = mUppercase ? Utils::String::toUpper(mText) : mText;
 
 	std::shared_ptr<Font> f = mFont;
 	const bool isMultiline = (mSize.y() == 0 || mSize.y() > f->getHeight()*1.2f);
@@ -280,6 +280,9 @@ void TextComponent::applyTheme(const std::shared_ptr<ThemeData>& theme, const st
 
 	if(properties & TEXT && elem->has("text"))
 		setText(elem->get<std::string>("text"));
+	
+	if(properties & FORCE_UPPERCASE && elem->has("forceUppercase"))
+		setUppercase(elem->get<bool>("forceUppercase"));
 
 	if(properties & LINE_SPACING && elem->has("lineSpacing"))
 		setLineSpacing(elem->get<float>("lineSpacing"));
