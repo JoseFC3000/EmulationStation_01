@@ -195,7 +195,7 @@ void TextListComponent<T>::render(const Transform4x4f& parentTrans)
 			color = mColors[entry.data.colorId];
 
 		if(!entry.data.textCache)
-			entry.data.textCache = std::unique_ptr<TextCache>(font->buildTextCache(mUppercase ? Utils::String::toUpper(entry.name) : entry.name, 0, 0, 0x000000FF));
+			entry.data.textCache = std::unique_ptr<TextCache>(font->buildTextCache(mUppercase ? std::string(entry.name) : entry.name, 0, 0, 0x000000FF));
 
 		entry.data.textCache->setColor(color);
 
