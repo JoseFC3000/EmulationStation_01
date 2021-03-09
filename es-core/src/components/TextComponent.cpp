@@ -281,9 +281,6 @@ void TextComponent::applyTheme(const std::shared_ptr<ThemeData>& theme, const st
 	if(properties & TEXT && elem->has("text"))
 		setText(elem->get<std::string>("text"));
 
-	if(properties & FORCE_UPPERCASE && elem->has("forceUppercase"))
-		setUppercase(elem->get<bool>("forceUppercase"));
-
 	if(properties & LINE_SPACING && elem->has("lineSpacing"))
 		setLineSpacing(elem->get<float>("lineSpacing"));
 
