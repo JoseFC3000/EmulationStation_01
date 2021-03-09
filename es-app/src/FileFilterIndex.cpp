@@ -101,7 +101,7 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 	{
 		case GENRE_FILTER:
 		{
-			key = Utils::String::toUpper(game->metadata.get("genre"));
+			key = std::string(game->metadata.get("genre"));
 			key = Utils::String::trim(key);
 			if (getSecondary && !key.empty()) {
 				std::istringstream f(key);
@@ -120,7 +120,7 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 		}
 		case PLAYER_FILTER:
 		{
-			key = Utils::String::toUpper(game->metadata.get("players"));
+			key = std::string(game->metadata.get("players"));
 			key = Utils::String::trim(key);
 			if (getSecondary && !key.empty()) {
 				std::istringstream f(key);
@@ -158,18 +158,18 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 		}
 		case DEVELOPER_FILTER:
 		{
-			key = Utils::String::toUpper(game->metadata.get("developer2"));
+			key = std::string(game->metadata.get("developer2"));
 			key = Utils::String::trim(key);
 
 			if ((getSecondary && !key.empty()) || (!getSecondary && key.empty()))
-				key = Utils::String::toUpper(game->metadata.get("developer"));
+				key = std::string(game->metadata.get("developer"));
 			else
-				key = Utils::String::toUpper(game->metadata.get("developer2"));
+				key = std::string(game->metadata.get("developer2"));
 			break;
 		}
 		case HARDWARE_FILTER:
 		{
-			key = Utils::String::toUpper(game->metadata.get("hardware"));
+			key = std::string(game->metadata.get("hardware"));
 			key = Utils::String::trim(key);
 			if (getSecondary && !key.empty()) {
 				std::istringstream f(key);
@@ -188,7 +188,7 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 		}
 		case REGION_FILTER:
 		{
-			key = Utils::String::toUpper(game->metadata.get("region"));
+			key = std::string(game->metadata.get("region"));
 			key = Utils::String::trim(key);
 			if (getSecondary && !key.empty()) {
 				std::istringstream f(key);
