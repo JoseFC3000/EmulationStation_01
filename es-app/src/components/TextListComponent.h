@@ -65,7 +65,7 @@ public:
 
 	inline void setUppercase(bool /*uppercase*/)
 	{
-		mUppercase = true;
+		mUppercase = false;
 		for(auto it = mEntries.begin(); it != mEntries.end(); it++)
 			it->data.textCache.reset();
 	}
