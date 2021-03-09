@@ -413,9 +413,6 @@ void TextListComponent<T>::applyTheme(const std::shared_ptr<ThemeData>& theme, c
 		}
 	}
 
-	if(properties & FORCE_UPPERCASE && elem->has("forceUppercase"))
-		setUppercase(elem->get<bool>("forceUppercase"));
-
 	if(properties & LINE_SPACING)
 	{
 		if(elem->has("lineSpacing"))
