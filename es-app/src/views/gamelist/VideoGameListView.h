@@ -37,12 +37,11 @@ private:
 	ImageComponent mImage;
 	ImageComponent mHardwareLogo;
 
-	TextComponent mLblRating, mLblReleaseDate, mLblDeveloper, mLblDeveloper2, mLblPublisher, mLblHardware, mLblRegion, mLblInformation, mLblGenre, mLblPlayers, mLblLastPlayed, mLblPlayCount;
+	TextComponent mLblRating, mLblReleaseDate, mLblDeveloper, mLblPublisher, mLblHardware, mLblRegion, mLblInformation, mLblGenre, mLblPlayers, mLblLastPlayed, mLblPlayCount;
 
 	RatingComponent mRating;
 	DateTimeComponent mReleaseDate;
 	TextComponent mDeveloper;
-	TextComponent mDeveloper2;
 	TextComponent mPublisher;
 	TextComponent mHardware;
 	TextComponent mRegion;
