@@ -21,10 +21,10 @@ VideoGameListView::VideoGameListView(Window* window, FileData* root) :
 	mVideo(nullptr),
 	mVideoPlaying(false),
 
-	mLblRating(window), mLblReleaseDate(window), mLblDeveloper(window), mLblDeveloper2(window), mLblPublisher(window), mLblHardware(window), mLblRegion(window), mLblInformation(window),
+	mLblRating(window), mLblReleaseDate(window), mLblDeveloper(window), mLblPublisher(window), mLblHardware(window), mLblRegion(window), mLblInformation(window),
 	mLblGenre(window), mLblPlayers(window), mLblLastPlayed(window), mLblPlayCount(window),
 
-	mRating(window), mReleaseDate(window), mDeveloper(window), mDeveloper2(window), mPublisher(window), mHardware(window), mRegion(window), mInformation(window),
+	mRating(window), mReleaseDate(window), mDeveloper(window), mPublisher(window), mHardware(window), mRegion(window), mInformation(window),
 	mGenre(window), mPlayers(window), mLastPlayed(window), mPlayCount(window),
 	mName(window)
 {
@@ -92,12 +92,9 @@ VideoGameListView::VideoGameListView(Window* window, FileData* root) :
 	mLblReleaseDate.setText("Released: ");
 	addChild(&mLblReleaseDate);
 	addChild(&mReleaseDate);
-	mLblDeveloper.setText("1st Developer: ");
+	mLblDeveloper.setText("Developer: ");
 	addChild(&mLblDeveloper);
 	addChild(&mDeveloper);
-	mLblDeveloper2.setText("2nd Developer: ");
-	addChild(&mLblDeveloper2);
-	addChild(&mDeveloper2);	
 	mLblPublisher.setText("Publisher: ");
 	addChild(&mLblPublisher);
 	addChild(&mPublisher);
@@ -164,9 +161,9 @@ void VideoGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 
 	initMDLabels();
 	std::vector<TextComponent*> labels = getMDLabels();
-	assert(labels.size() == 12);
-	const char* lblElements[12] = {
-		"md_lbl_rating", "md_lbl_releasedate", "md_lbl_developer", "md_lbl_developer2", "md_lbl_publisher", "md_lbl_hardware", "md_lbl_region", "md_lbl_information",
+	assert(labels.size() == 11);
+	const char* lblElements[11] = {
+		"md_lbl_rating", "md_lbl_releasedate", "md_lbl_developer", "md_lbl_publisher", "md_lbl_hardware", "md_lbl_region", "md_lbl_information",
 		"md_lbl_genre", "md_lbl_players", "md_lbl_lastplayed", "md_lbl_playcount"
 	};
 
@@ -178,9 +175,9 @@ void VideoGameListView::onThemeChanged(const std::shared_ptr<ThemeData>& theme)
 
 	initMDValues();
 	std::vector<GuiComponent*> values = getMDValues();
-	assert(values.size() == 12);
-	const char* valElements[12] = {
-		"md_rating", "md_releasedate", "md_developer", "md_developer2", "md_publisher", "md_hardware", "md_region", "md_information",
+	assert(values.size() == 11);
+	const char* valElements[11] = {
+		"md_rating", "md_releasedate", "md_developer", "md_publisher", "md_hardware", "md_region", "md_information",
 		"md_genre", "md_players", "md_lastplayed", "md_playcount"
 	};
 
@@ -236,7 +233,6 @@ void VideoGameListView::initMDValues()
 	mRating.setSize(defaultFont->getHeight() * 5.0f, (float)defaultFont->getHeight());
 	mReleaseDate.setFont(defaultFont);
 	mDeveloper.setFont(defaultFont);
-	mDeveloper2.setFont(defaultFont);
 	mPublisher.setFont(defaultFont);
 	mHardware.setFont(defaultFont);
 	mRegion.setFont(defaultFont);
@@ -302,7 +298,6 @@ void VideoGameListView::updateInfoPanel()
 		mRating.setValue(file->metadata.get("rating"));
 		mReleaseDate.setValue(file->metadata.get("releasedate"));
 		mDeveloper.setValue(file->metadata.get("developer"));
-		mDeveloper2.setValue(file->metadata.get("developer2"));
 		mPublisher.setValue(file->metadata.get("publisher"));
 		mHardware.setValue(file->metadata.get("hardware"));
 		mRegion.setValue(file->metadata.get("region"));
@@ -402,7 +397,6 @@ std::vector<TextComponent*> VideoGameListView::getMDLabels()
 	ret.push_back(&mLblRating);
 	ret.push_back(&mLblReleaseDate);
 	ret.push_back(&mLblDeveloper);
-	ret.push_back(&mLblDeveloper2);
 	ret.push_back(&mLblPublisher);
 	ret.push_back(&mLblHardware);
 	ret.push_back(&mLblRegion);
@@ -420,7 +414,6 @@ std::vector<GuiComponent*> VideoGameListView::getMDValues()
 	ret.push_back(&mRating);
 	ret.push_back(&mReleaseDate);
 	ret.push_back(&mDeveloper);
-	ret.push_back(&mDeveloper2);
 	ret.push_back(&mPublisher);
 	ret.push_back(&mHardware);
 	ret.push_back(&mRegion);
