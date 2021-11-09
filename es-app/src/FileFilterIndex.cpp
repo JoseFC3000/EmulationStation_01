@@ -19,7 +19,7 @@ FileFilterIndex::FileFilterIndex()
 		{ GENRE_FILTER, 	&genreIndexAllKeys, 	&filterByGenre,		&genreIndexFilteredKeys, 	"genre",		true,			"genre",		"GENRE"	},
 		{ PLAYER_FILTER, 	&playersIndexAllKeys, 	&filterByPlayers,	&playersIndexFilteredKeys, 	"players",		true,			"players",		"PLAYERS" },
 		{ PUBLISHER_FILTER, 	&publisherIndexAllKeys, &filterByPublisher,	&publisherIndexFilteredKeys, 	"publisher",		true,			"publisher",		"PUBLISHER" },
-		{ DEVELOPER_FILTER, 	&developerIndexAllKeys, &filterByDeveloper,	&developerIndexFilteredKeys, 	"developer",		true,			"developer2",		"DEVELOPER" },
+		{ DEVELOPER_FILTER, 	&developerIndexAllKeys, &filterByDeveloper,	&developerIndexFilteredKeys, 	"developer",		true,			"developer",		"DEVELOPER" },
 		{ HARDWARE_FILTER, 	&hardwareIndexAllKeys, 	&filterByHardware,	&hardwareIndexFilteredKeys, 	"hardware",		true,			"hardware",		"HARDWARE" },
 		{ REGION_FILTER, 	&regionIndexAllKeys, 	&filterByRegion,	&regionIndexFilteredKeys, 	"region",		true,			"region",		"REGION" },
 		{ RATINGS_FILTER, 	&ratingsIndexAllKeys, 	&filterByRatings,	&ratingsIndexFilteredKeys, 	"rating",		false,			"",			"RATING" },
@@ -157,14 +157,22 @@ std::string FileFilterIndex::getIndexableKey(FileData* game, FilterIndexType typ
 			break;
 		}
 		case DEVELOPER_FILTER:
-		{
-			key = std::string(game->metadata.get("developer2"));
+		{	
+			key = std::string(game->metadata.get("developer"));
 			key = Utils::String::trim(key);
-
-			if ((getSecondary && !key.empty()) || (!getSecondary && key.empty()))
-				key = std::string(game->metadata.get("developer"));
-			else
-				key = std::string(game->metadata.get("developer2"));
+			if (getSecondary && !key.empty()) {
+				std::istringstream f(key);
+				std::string newKey;
+				getline(f, newKey, '/');
+				if (!newKey.empty() && newKey != key)
+				{
+					key = newKey;
+				}
+				else
+				{
+					key = std::string();
+				}
+			}
 			break;
 		}
 		case HARDWARE_FILTER:
@@ -530,41 +538,26 @@ void FileFilterIndex::managePublisherEntryInIndex(FileData* game, bool remove)
 
 void FileFilterIndex::manageDeveloperEntryInIndex(FileData* game, bool remove)
 {
-	std::string dev2 = getIndexableKey(game, DEVELOPER_FILTER, false);
-	std::string dev = getIndexableKey(game, DEVELOPER_FILTER, true);
+
+	std::string key = getIndexableKey(game, DEVELOPER_FILTER, false);
 
 	// flag for including unknowns
 	bool includeUnknown = INCLUDE_UNKNOWN;
-	bool unknownDev2 = false;
-	bool unknownDev = false;
 
-	if (dev2 == UNKNOWN_LABEL) {
-		unknownDev2 = true;
-	}
-	if (dev == UNKNOWN_LABEL) {
-		unknownDev = true;
-	}
-
-	if (!includeUnknown && unknownDev && unknownDev2) {
-		// no valid rating info found
+	// only add unknown in pubdev IF both dev and pub are empty
+	if (!includeUnknown && (key == UNKNOWN_LABEL || key == "BIOS")) {
+		// no valid genre info found
 		return;
 	}
 
-	if (unknownDev && unknownDev2) {
-		// if no info at all
-		manageIndexEntry(&developerIndexAllKeys, dev2, remove);
-	}
-	else
+	manageIndexEntry(&developerIndexAllKeys, key, remove);
+
+	key = getIndexableKey(game, DEVELOPER_FILTER, true);
+	if (!includeUnknown && key == UNKNOWN_LABEL)
 	{
-		if (!unknownDev) {
-			// if no info at all
-			manageIndexEntry(&developerIndexAllKeys, dev, remove);
-		}
-		if (!unknownDev2) {
-			// if no info at all
-			manageIndexEntry(&developerIndexAllKeys, dev2, remove);
-		}
+		manageIndexEntry(&developerIndexAllKeys, key, remove);
 	}
+	
 }
 
 void FileFilterIndex::manageHardwareEntryInIndex(FileData* game, bool remove)
