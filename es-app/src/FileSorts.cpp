@@ -26,7 +26,7 @@ namespace FileSorts
 		FileData::SortType(&compareGenre, true, "genre, ascending"),
 		FileData::SortType(&compareGenre, false, "genre, descending"),
 
-		FileData::SortType(&compareDeveloper, true, "DEVELOPER - Ascending"),
+		FileData::SortType(&compareDeveloper, true, "developer, ascending"),
 		FileData::SortType(&compareDeveloper, false, "developer, descending"),
 
 		FileData::SortType(&comparePublisher, true, "publisher, ascending"),
