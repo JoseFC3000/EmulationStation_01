@@ -305,7 +305,7 @@ private:
 			{
 				if(it->selected)
 				{
-					mText.setText(Utils::String::toUpper(it->name));
+					mText.setText(std::string(it->name));
 					mText.setSize(0, mText.getSize().y());
 					setSize(mText.getSize().x() + mLeftArrow.getSize().x() + mRightArrow.getSize().x() + 24, mText.getSize().y());
 					if(mParent) // hack since theres no "on child size changed" callback atm...
