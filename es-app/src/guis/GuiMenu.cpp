@@ -174,12 +174,12 @@ void GuiMenu::openSoundSettings()
 		auto omx_audio_dev = std::make_shared< OptionListComponent<std::string> >(mWindow, "OMX PLAYER AUDIO DEVICE", false);
 		std::vector<std::string> omx_cards;
 		// RPi Specific  Audio Cards
-		omx_cards.push_back("Local");
-		omx_cards.push_back("HDMI");
-		omx_cards.push_back("Both");
-		omx_cards.push_back("ALSA");
-		omx_cards.push_back("ALSA:HW:0,0");
-		omx_cards.push_back("ALSA:HW:1,0");
+		omx_cards.push_back("local");
+		omx_cards.push_back("hdmi");
+		omx_cards.push_back("both");
+		omx_cards.push_back("alsa");
+		omx_cards.push_back("alsa:hw:0,0");
+		omx_cards.push_back("alsa:hw:1,0");
 		if (Settings::getInstance()->getString("OMXAudioDev") != "") {
 			if (std::find(omx_cards.begin(), omx_cards.end(), Settings::getInstance()->getString("OMXAudioDev")) == omx_cards.end()) {
 				omx_cards.push_back(Settings::getInstance()->getString("OMXAudioDev"));
@@ -261,10 +261,10 @@ void GuiMenu::openUISettings()
 	// transition style
 	auto transition_style = std::make_shared< OptionListComponent<std::string> >(mWindow, "TRANSITION STYLE", false);
 	std::vector<std::string> transitions;
-	transitions.push_back("Fade");
-	transitions.push_back("Slide");
-	transitions.push_back("Instant");
-	transitions.push_back("Arcade");
+	transitions.push_back("fade");
+	transitions.push_back("slide");
+	transitions.push_back("instant");
+	transitions.push_back("arcade");
 	for(auto it = transitions.cbegin(); it != transitions.cend(); it++)
 		transition_style->add(*it, *it, Settings::getInstance()->getString("TransitionStyle") == *it);
 	s->addWithLabel("TRANSITION STYLE", transition_style);
@@ -316,11 +316,11 @@ void GuiMenu::openUISettings()
 	// GameList view style
 	auto gamelist_style = std::make_shared< OptionListComponent<std::string> >(mWindow, "GAMELIST VIEW STYLE", false);
 	std::vector<std::string> styles;
-	styles.push_back("Automatic");
-	styles.push_back("Basic");
-	styles.push_back("Detailed");
-	styles.push_back("Video");
-	styles.push_back("Grid");
+	styles.push_back("automatic");
+	styles.push_back("basic");
+	styles.push_back("detailed");
+	styles.push_back("video");
+	styles.push_back("grid");
 
 	for (auto it = styles.cbegin(); it != styles.cend(); it++)
 		gamelist_style->add(*it, *it, Settings::getInstance()->getString("GamelistViewStyle") == *it);
@@ -336,7 +336,7 @@ void GuiMenu::openUISettings()
 
 	// Optionally start in selected system
 	auto systemfocus_list = std::make_shared< OptionListComponent<std::string> >(mWindow, "START ON SYSTEM", false);
-	systemfocus_list->add("None", "", Settings::getInstance()->getString("StartupSystem") == "");
+	systemfocus_list->add("NONE", "", Settings::getInstance()->getString("StartupSystem") == "");
 	for (auto it = SystemData::sSystemVector.cbegin(); it != SystemData::sSystemVector.cend(); it++)
 	{
 		if ("retropie" != (*it)->getName())
@@ -436,7 +436,7 @@ void GuiMenu::openUISettings2()
 
 	// Optionally start in selected system
 	auto systemfocus_list = std::make_shared< OptionListComponent<std::string> >(mWindow, "START ON SYSTEM", false);
-	systemfocus_list->add("None", "", Settings::getInstance()->getString("StartupSystem") == "");
+	systemfocus_list->add("NONE", "", Settings::getInstance()->getString("StartupSystem") == "");
 	for (auto it = SystemData::sSystemVector.cbegin(); it != SystemData::sSystemVector.cend(); it++)
 	{
 		if ("retropie" != (*it)->getName())
@@ -472,10 +472,10 @@ void GuiMenu::openOtherSettings()
 	// power saver
 	auto power_saver = std::make_shared< OptionListComponent<std::string> >(mWindow, "POWER SAVER MODES", false);
 	std::vector<std::string> modes;
-	modes.push_back("Disabled");
-	modes.push_back("Default");
-	modes.push_back("Enhanced");
-	modes.push_back("Instant");
+	modes.push_back("disabled");
+	modes.push_back("default");
+	modes.push_back("enhanced");
+	modes.push_back("instant");
 	for (auto it = modes.cbegin(); it != modes.cend(); it++)
 		power_saver->add(*it, *it, Settings::getInstance()->getString("PowerSaverMode") == *it);
 	s->addWithLabel("POWER SAVER MODES", power_saver);
@@ -492,9 +492,9 @@ void GuiMenu::openOtherSettings()
 	// gamelists
 	auto gamelistsSaveMode = std::make_shared< OptionListComponent<std::string> >(mWindow, "SAVE METADATA", false);
 	std::vector<std::string> saveModes;
-	saveModes.push_back("On Exit");
-	saveModes.push_back("Always");
-	saveModes.push_back("Never");
+	saveModes.push_back("on exit");
+	saveModes.push_back("always");
+	saveModes.push_back("never");
 
 	for(auto it = saveModes.cbegin(); it != saveModes.cend(); it++)
 		gamelistsSaveMode->add(*it, *it, Settings::getInstance()->getString("SaveGamelistsMode") == *it);
