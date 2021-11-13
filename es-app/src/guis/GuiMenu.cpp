@@ -104,12 +104,12 @@ void GuiMenu::openSoundSettings()
 		// audio card
 		auto audio_card = std::make_shared< OptionListComponent<std::string> >(mWindow, "AUDIO CARD", false);
 		std::vector<std::string> audio_cards;
-		audio_cards.push_back("Default");
-		audio_cards.push_back("Sysdefault");
-		audio_cards.push_back("Dmix");
-		audio_cards.push_back("HW");
-		audio_cards.push_back("PlugHW");
-		audio_cards.push_back("Null");
+		audio_cards.push_back("default");
+		audio_cards.push_back("sysdefault");
+		audio_cards.push_back("dmix");
+		audio_cards.push_back("hw");
+		audio_cards.push_back("plughw");
+		audio_cards.push_back("null");
 		if (Settings::getInstance()->getString("AudioCard") != "") {
 			if(std::find(audio_cards.begin(), audio_cards.end(), Settings::getInstance()->getString("AudioCard")) == audio_cards.end()) {
 				audio_cards.push_back(Settings::getInstance()->getString("AudioCard"));
@@ -127,13 +127,13 @@ void GuiMenu::openSoundSettings()
 		// volume control device
 		auto vol_dev = std::make_shared< OptionListComponent<std::string> >(mWindow, "AUDIO DEVICE", false);
 		std::vector<std::string> transitions;
-		transitions.push_back("PCM");
-		transitions.push_back("HDMI");
-		transitions.push_back("Headphone");
-		transitions.push_back("Speaker");
-		transitions.push_back("Master");
-		transitions.push_back("Digital");
-		transitions.push_back("Analogue");
+		transitions.push_back("pcm");
+		transitions.push_back("hdmi");
+		transitions.push_back("headphone");
+		transitions.push_back("speaker");
+		transitions.push_back("master");
+		transitions.push_back("digital");
+		transitions.push_back("analogue");
 		if (Settings::getInstance()->getString("AudioDevice") != "") {
 			if(std::find(transitions.begin(), transitions.end(), Settings::getInstance()->getString("AudioDevice")) == transitions.end()) {
 				transitions.push_back(Settings::getInstance()->getString("AudioDevice"));
