@@ -48,7 +48,7 @@ private:
 			for(auto it = mParent->mEntries.begin(); it != mParent->mEntries.end(); it++)
 			{
 				row.elements.clear();
-				row.addElement(std::make_shared<TextComponent>(mWindow, std::string(it->name), font, 0x777777FF), true);
+				row.addElement(std::make_shared<TextComponent>(mWindow, Utils::String::toUpper(it->name), font, 0x777777FF), true);
 
 				OptionListData& e = *it;
 
